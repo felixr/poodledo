@@ -13,6 +13,23 @@ client = ApiClient()
 client.authenticate('my.mail@example.com', 'mypass')
 }}}
 
+== Re-using the authentication key ==
+
+{{{
+from poodledo import ApiClient
+
+client = ApiClient()
+key = client.authenticate('my.mail@example.com', 'mypass')
+
+# save key somewhere ...
+# so we can skip authenticate later
+
+key = ... # load key from where ever it was stored
+client = ApiClient(key)
+
+
+}}}
+
 
 == Tasks ==
 
