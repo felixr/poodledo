@@ -2,34 +2,32 @@
 # -*- coding: UTF-8 -*-
 
 import os
-import urllib
 import urllib2
 
-import elementtree.ElementTree as ET
 import time
+
+import email.utils
 from datetime import datetime, timedelta
+
+try:
+    import xml.etree.cElementTree as ET
+except ImportError:
+    try:
+        import elementtree.ElementTree as ET
+    except ImportError:
+        sys.exit("poodledo requires either Python 2.5+, or the ElementTree module installed.")
+
 
 try:
     from hashlib import md5
 except ImportError:
     from md5 import md5
 
-
 __all__ = ['ApiClient']
 
-def _local_date(string):
-    dt = datetime.strptime(string[0:25], '%a, %d %b %Y %H:%M:%S')
-    return dt + timedelta(hours=6) + timedelta(seconds=_local_time_offset())
-
-def _local_time_offset():
-    """Return offset of local zone from GMT"""
-    if time.localtime().tm_isdst and time.daylight:
-        return -time.altzone
-    else:
-        return -time.timezone
-
-def _date(string):
-    return datetime.st
+def _local_date(date_string):
+    dt = email.utils.mktime_tz(email.utils.parsedate_tz(date_string))
+    return datetime.fromtimestamp(dt)
 
 def _boolstr(string):
     return bool(int(string))
